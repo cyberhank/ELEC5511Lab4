@@ -29,13 +29,13 @@ maxp1 = convy.max_pooling_forward(conv1_relu.astype(np.float64),2)
 
 conv2 = convy.conv_forward(maxp1,conv2_w,conv2_b, 1)
 conv2_relu = convy.relu_forward(conv2)
-maxp2 = convy.max_pooling_forward(conv2_relu,1)
+maxp2 = convy.max_pooling_forward(conv2_relu,2)
 flatten = convy.flatten_forward(maxp2)
-print(np.shape(fc_w))
-print(np.shape(fc_b))
+
 y = convy.fc_forward(flatten,fc_w,fc_b)
+print(y)
 for i in range(5):
     plt.figure(figsize=(3,3))
     plt.imshow(np.reshape(x[i],(28,28)), cmap='gray')
     plt.show()
-    print("y_true:{},y_predict:{}".format(y[i],np.argmax(y_predict[:,i])))
+    print("y_true:{},y_predict:{}".format(y[i],np.argmax(y[:,i])))

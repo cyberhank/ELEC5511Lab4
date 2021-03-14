@@ -10,8 +10,7 @@ class NeuralNetwork():
         return np.reshape(z, (N, -1))
     def fc_forward(self, z, W, b):
         return np.dot(W, z.transpose()) + np.expand_dims(b,1).repeat(z.shape[0],axis = 1)
-    def conv_forward(self, z, K, b):
-        return conv_z
+    
     def max_pooling_forward(self,z,stride):
          (N,C,H,W) = z.shape
          h = int(H/stride)
@@ -30,15 +29,18 @@ class NeuralNetwork():
         size = np.array(np.shape(padding_z))
         size.flatten()
         (N,C,H,W) = z.shape
-        y = np.zeros([N,C,H,W])
+       # y = np.zeros([N,C,H,W])
+        D, C, k1, k2 = K.shape
+        y = np.zeros([N,D,H,W])
        
         for i in range(size[0]):
-            for j in range(size[1]):
-                for k in range(1,size[2]-2):                 
-                    for l in range(1,size[3]-2):
-                        y[i,j,k,l] += sum(sum(padding_z[i,j,(k-1):(k+2),(l-1):(l+2)]*K[j,0,:,:]))
+            for j in range(D):
+                for k in range(size[2]-2):                 
+                    for l in range(size[3]-2):
+                        #y[i,j,k,l] += sum(sum(padding_z[i,j,(k-1):(k+2),(l-1):(l+2)]*K[j,0,:,:]))
+                        y[i,j,k,l] =  np.sum(padding_z[i, :, k:k + k1, l:l + k2] * K[j, :]) + b[j]
        
-        y = np.array(y)     
+            
 
         return y
     pass
